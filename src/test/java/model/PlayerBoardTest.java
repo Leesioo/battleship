@@ -26,8 +26,8 @@ public class PlayerBoardTest {
         PlayerBoard board = PlayerBoard.fresh();
         // when
         Set<BoardField> types = new HashSet<>();
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 1; i <= 10; i++) {
+            for (int j = 1; j <= 10; j++) {
                 types.add(board.getMapElement(new Point(i,j)));
             }
         }
@@ -94,7 +94,7 @@ public class PlayerBoardTest {
         // given
         PlayerBoard board = PlayerBoard.fresh();
         // when
-        BoardField seaElement = board.getMapElement(new Point(10,5));
+        BoardField seaElement = board.getMapElement(new Point(11,5));
         // then
         assertEquals(BoardField.NONE, seaElement);
     }
@@ -110,5 +110,17 @@ public class PlayerBoardTest {
         // then
         assertEquals(BoardField.SHIP, newBoard.getMapElement(point));
         assertEquals(BoardField.SHIP, newBoard.getMapElement(new Point(4,6)));
+    }
+
+    @Test
+    public void shouldNotBePossibleToChangeElementBeyondBoard() {
+        // given
+        PlayerBoard board = PlayerBoard.fresh();
+        Point point = new Point(13,7);
+        BoardField miss = BoardField.MISS;
+        // when
+        PlayerBoard newBoard = board.updateMap(point, miss);
+        // then
+        assertEquals(BoardField.NONE, newBoard.getMapElement(point));
     }
 }

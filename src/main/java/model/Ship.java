@@ -22,4 +22,12 @@ public class Ship {
     public Point getPoint() {
         return point;
     }
+
+    public Point getEndPoint() {
+        if (orientation == Orientation.HORIZONTAL) {
+            return new Point(point.getX() + shipType.size().intValue() - 1, point.getY());
+        } else {
+            return new Point(point.getX(), point.getY() + shipType.size().intValue() - 1);
+        }
+    }
 }
