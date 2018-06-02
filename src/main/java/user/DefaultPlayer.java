@@ -13,16 +13,16 @@ public class DefaultPlayer implements Player {
 
     @Override
     public Ship getNextShip(ShipType shipType) {
-        return null;
+        return userInterface.askUserForShip(shipType);
     }
 
     @Override
     public Point getNextShot() {
-        return null;
+        return userInterface.askUserForShot();
     }
 
     @Override
     public void sendMessage(String message) {
-
+        userInterface.notifyUser(message);
     }
 }

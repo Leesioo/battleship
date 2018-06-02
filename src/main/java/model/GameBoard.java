@@ -2,17 +2,20 @@ package model;
 
 import validation.AndValidator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameBoard {
+    private List<GameBoardObserver> observers;
     private PlayerBoard firstPlayerBoard;
     private PlayerBoard secondPlayerBoard;
-    private GameBoardObserver firstBoardObserver;
-    private GameBoardObserver secondBoardObserver;
     private AndValidator validator;
 
     public GameBoard(PlayerBoard firstPlayerBoard, PlayerBoard secondPlayerBoard, AndValidator validator) {
         this.firstPlayerBoard = firstPlayerBoard;
         this.secondPlayerBoard = secondPlayerBoard;
         this.validator = validator;
+        observers = new ArrayList<>();
     }
 
     public BoardField getFirstPlayerBoard(Point point) {
@@ -33,6 +36,7 @@ public class GameBoard {
                 firstPlayerBoard = firstPlayerBoard.updateMap(point, BoardField.SHIP_HIT);
                 break;
         }
+        updateObservers();
         return actualField;
     }
 
@@ -46,6 +50,7 @@ public class GameBoard {
                 secondPlayerBoard = secondPlayerBoard.updateMap(point, BoardField.SHIP_HIT);
                 break;
         }
+        updateObservers();
         return actualField;
     }
 
@@ -53,6 +58,7 @@ public class GameBoard {
         boolean result = validator.isValidate(ship, firstPlayerBoard);
         if (result) {
             firstPlayerBoard = firstPlayerBoard.addShip(ship);
+            updateObservers();
         }
         return result;
     }
@@ -61,8 +67,14 @@ public class GameBoard {
         boolean result = validator.isValidate(ship, secondPlayerBoard);
         if (result) {
             secondPlayerBoard = secondPlayerBoard.addShip(ship);
+            // informujemy wszystkich obserwatorów o zmianie planszy
+            updateObservers();
         }
         return result;
+    }
+
+    private void updateObservers() {
+        observers.forEach(observer -> observer.update(this));
     }
 
     public Integer getFirstPlayerShipsCount() {
@@ -71,5 +83,14 @@ public class GameBoard {
 
     public Integer getSecondPlayerShipsCount() {
         return secondPlayerBoard.getShips().size();
+    }
+
+    public void register(GameBoardObserver observer) {
+        observers.add(observer);
+    }
+
+    public void unregister(GameBoardObserver observer) {
+        observers.remove(observer);
+
     }
 }

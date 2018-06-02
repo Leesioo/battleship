@@ -5,6 +5,8 @@ import org.junit.Test;
 import validation.AndValidator;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 public class GameBoardTest {
 
@@ -82,5 +84,97 @@ public class GameBoardTest {
         assertEquals(secondCount,gameBoard.getSecondPlayerShipsCount());
         assertFalse(resultOfFirst);
         assertFalse(resultOfSecond);
+    }
+
+    @Test
+    public void whenSecondPlayerShipIsAddThenUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        Ship ship = new Ship(ShipType.DESTROYER, Orientation.HORIZONTAL, new Point(2, 3));
+        gameBoard.register(observer);
+        gameBoard.addShipOnSecondBoard(ship);
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(1)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenFirstPlayerShipIsAddThenUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        Ship ship = new Ship(ShipType.DESTROYER, Orientation.HORIZONTAL, new Point(2, 3));
+        gameBoard.register(observer);
+        gameBoard.addShipOnFirstBoard(ship);
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(1)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenSecondPlayerBoardIsShotThenUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        gameBoard.register(observer);
+        gameBoard.shootAtSecondPlayerBoard(new Point(2,3));
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(1)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenFirstPlayerBoardIsShotThenUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        gameBoard.register(observer);
+        gameBoard.shootAtFirstPlayerBoard(new Point(4,5));
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(1)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenSecondPlayerShipIsAddAndPlayerIsUnregisterThenNoUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        Ship ship = new Ship(ShipType.DESTROYER, Orientation.HORIZONTAL, new Point(2, 3));
+        gameBoard.register(observer);
+        gameBoard.unregister(observer);
+        gameBoard.addShipOnSecondBoard(ship);
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(0)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenFirstPlayerShipIsAddAndPlayerIsUnregisterThenNoUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        Ship ship = new Ship(ShipType.DESTROYER, Orientation.HORIZONTAL, new Point(2, 3));
+        gameBoard.register(observer);
+        gameBoard.unregister(observer);
+        gameBoard.addShipOnFirstBoard(ship);
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(0)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenSecondPlayerBoardIsShotAndPlayerIsUnregisterThenNoUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        gameBoard.register(observer);
+        gameBoard.unregister(observer);
+        gameBoard.shootAtSecondPlayerBoard(new Point(2,3));
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(0)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+    }
+
+    @Test
+    public void whenFirstPlayerBoardIsShotAndPlayerIsUnregisterThenNoUpdateObserver() {
+        GameBoardObserver observer = mock(GameBoardObserver.class);
+        gameBoard.register(observer);
+        gameBoard.unregister(observer);
+        gameBoard.shootAtFirstPlayerBoard(new Point(4,5));
+        // zweryfikuj czy na obiekcie observer została wykonana dokładnie raz metoda update
+        verify(observer, times(0)).update(eq(gameBoard));
+        // to samo można zapisać bez parametru times... gdyż jest to wartość domyślna
+        // można również użyć never zamiast times(0)
+        verify(observer, never()).update(any());
+        // albo że nic zupełnie nie zostało zrobione
+        verifyZeroInteractions(observer);
     }
 }

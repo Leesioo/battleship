@@ -40,8 +40,6 @@ public class PlayerBoard {
         return shipList;
     }
 
-    ;
-
     public PlayerBoard updateMap(Point point, BoardField field) {
         return new Builder(map, shipList).seaElement(point, field).build();
     }

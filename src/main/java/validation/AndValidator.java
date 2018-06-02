@@ -3,7 +3,6 @@ package validation;
 import model.PlayerBoard;
 import model.Ship;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

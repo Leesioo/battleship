@@ -5,14 +5,17 @@ import model.*;
 public class ConsoleUI implements UserInterface, GameBoardObserver {
     private JavaConsoleDelegate console;
     private GameBoard gameBoard;
+    private boolean isBoardChanged;
 
-    public ConsoleUI() {
-        console = new JavaConsoleDelegate();
+    public ConsoleUI(JavaConsoleDelegate console) {
+        this.console= console;
     }
 
     @Override
     public void update(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
+        isBoardChanged = true;
+        printMaps();
     }
 
     @Override
@@ -72,9 +75,9 @@ public class ConsoleUI implements UserInterface, GameBoardObserver {
         BoardField field;
         for (int i = 1; i <= 10; i++) {
             if (lp == 1) {
-                field = gameBoard.getFirstPlayerBoard(new Point(x, i));
+                field = gameBoard.getFirstPlayerBoard(new Point(i, x));
             } else {
-                field = gameBoard.getSecondPlayerBoard(new Point(x, i));
+                field = gameBoard.getSecondPlayerBoard(new Point(i, x));
                 if (field == BoardField.SHIP) {
                     field = BoardField.WATER;
                 }
@@ -125,40 +128,8 @@ public class ConsoleUI implements UserInterface, GameBoardObserver {
         Character character = result.toUpperCase().charAt(0);
         String column = result.substring(1);
         Integer x, y;
-        switch (character) {
-            case 'A':
-                x = 1;
-                break;
-            case 'B':
-                x = 2;
-                break;
-            case 'C':
-                x = 3;
-                break;
-            case 'D':
-                x = 4;
-                break;
-            case 'E':
-                x = 5;
-                break;
-            case 'F':
-                x = 6;
-                break;
-            case 'G':
-                x = 7;
-                break;
-            case 'H':
-                x = 8;
-                break;
-            case 'I':
-                x = 9;
-                break;
-            case 'J':
-                x = 10;
-                break;
-            default:
-                x = 0;
-        }
+        x = character - 'A' + 1;
+
         try {
             y = Integer.parseInt(column);
         } catch (NumberFormatException e) {
@@ -168,7 +139,7 @@ public class ConsoleUI implements UserInterface, GameBoardObserver {
         if (x > 0 && x < 11 && y > 0 && y < 11) {
             return new Point(x, y);
         } else
-            return null;
+            return new Point(0, 0);
     }
 
     @Override
@@ -185,7 +156,7 @@ public class ConsoleUI implements UserInterface, GameBoardObserver {
 
         notifyUser("Is ship horizontal? (Y,Yes/Other)");
         String result = console.readFromConsole().toUpperCase();
-        if (result == "Y" || result == "YES") {
+        if (result.equals("Y") || result.equals("YES")) {
             orientation = Orientation.HORIZONTAL;
         } else {
             orientation = Orientation.VERTICAL;

@@ -10,6 +10,7 @@ public class ComputerRandomUI implements UserInterface, GameBoardObserver {
     private GameBoard gameBoard;
     private Random random;
     private Set<Point> possible;
+    private boolean isBoardChanged;
 
     public ComputerRandomUI() {
         random = new Random();
@@ -24,6 +25,7 @@ public class ComputerRandomUI implements UserInterface, GameBoardObserver {
 
     @Override
     public void update(GameBoard gameBoard) {
+        isBoardChanged = true;
         this.gameBoard = gameBoard;
     }
 
