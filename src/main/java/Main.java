@@ -36,13 +36,13 @@ public class Main {
         ships.add(ShipType.BATTLESHIP);
         ships.add(ShipType.CRUISER);
         ships.add(ShipType.CRUISER);
-//        ships.add(ShipType.DESTROYER);
-//        ships.add(ShipType.DESTROYER);
-//        ships.add(ShipType.DESTROYER);
-//        ships.add(ShipType.SUBMARINE);
-//        ships.add(ShipType.SUBMARINE);
-//        ships.add(ShipType.SUBMARINE);
-//        ships.add(ShipType.SUBMARINE);
+        ships.add(ShipType.DESTROYER);
+        ships.add(ShipType.DESTROYER);
+        ships.add(ShipType.DESTROYER);
+        ships.add(ShipType.SUBMARINE);
+        ships.add(ShipType.SUBMARINE);
+        ships.add(ShipType.SUBMARINE);
+        ships.add(ShipType.SUBMARINE);
         return ships;
     }
 

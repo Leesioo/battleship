@@ -27,7 +27,7 @@ public class GameMasterLogic {
     private Long countShipFields() {
         Long result = 0L;
         for (ShipType shipType : listOfShip) {
-            result =+ shipType.size();
+            result += shipType.size();
         }
         return result;
     }
